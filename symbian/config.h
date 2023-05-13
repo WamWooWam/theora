@@ -37,6 +37,10 @@
 
 #define THEORA_SUPPORT_ENCODE 0
 
+/* Do not build floating point code */
+
+#define	THEORA_DISABLE_FLOAT 1
+
 #ifdef __WINS__
 
 /* Disable some warnings */

@@ -1,6 +1,7 @@
+INCLUDES = -I$(top_srcdir)/include
+
 noinst_HEADERS = tests.h
 
-AM_CPPFLAGS = -I$(top_srcdir)/include
 AM_CFLAGS = $(OGG_CFLAGS)
 
 THEORADIR = ../lib

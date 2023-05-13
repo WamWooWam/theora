@@ -3,9 +3,9 @@
 # makefile to generate the spec document from sources
 # requires transfig and pdflatex
 
-built_docs = Theora.pdf
+docdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)
 
-DISTCLEANFILES = $(built_docs)
+built_docs = Theora.pdf
 
 if BUILD_SPEC
 doc_DATA = $(built_docs)
@@ -31,15 +31,12 @@ EXTRA_DIST = $(built_docs) $(SPEC_SRCS) $(FIG_SRCS) ltablex.sty
 if BUILD_SPEC
 # latex three times is the charm with references
 # long tables require the .aux file to start from scratch
-Theora.pdf : $(SPEC_SRCS) $(FIG_OBJS) vp3huff.tex
+Theora.pdf : $(SPEC_SRCS) $(FIG_OBJS) vp3huff.tex spec.bib
 	-$(RM) spec.aux
-	-cd $(srcdir) && TEXINPUTS=".:$(CURDIR):" pdflatex \
-	 -interaction nonstopmode -output-directory "$(CURDIR)" spec.tex
-	BIBINPUTS="$(srcdir):.:" BSTINPUT="$(srcdir):.:" bibtex spec.aux
-	cd $(srcdir) && TEXINPUTS=".:$(CURDIR):" pdflatex \
-	 -interaction nonstopmode -output-directory "$(CURDIR)" spec.tex
-	cd $(srcdir) && TEXINPUTS=".:$(CURDIR):" pdflatex \
-	 -interaction nonstopmode -output-directory "$(CURDIR)" spec.tex
+	pdflatex -interaction nonstopmode spec.tex
+	bibtex spec.aux
+	pdflatex -interaction nonstopmode spec.tex
+	pdflatex -interaction nonstopmode spec.tex
 	mv spec.pdf $@
 else
 Theora.pdf : 

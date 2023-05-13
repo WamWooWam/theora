@@ -11,7 +11,7 @@
  ********************************************************************
 
   function: routines for validating codec initialization
-  last mod: $Id$
+  last mod: $Id: noop_theora.c 16503 2009-08-22 18:14:02Z giles $
 
  ********************************************************************/
 
@@ -32,10 +32,6 @@ noop_test_encode ()
   ti.width = 16;
   ti.height = 16;
 
-  INFO ("+ Setting a 1:1 frame rate");
-  ti.fps_numerator = 1;
-  ti.fps_denominator = 1;
-
   INFO ("+ Initializing theora_state for encoding");
   if (theora_encode_init (&th, &ti) != OC_DISABLED) {
     INFO ("+ Clearing theora_state");
@@ -48,7 +44,6 @@ noop_test_encode ()
   return 0;
 }
 
-#if 0
 static int
 noop_test_decode ()
 {
@@ -69,7 +64,6 @@ noop_test_decode ()
 
   return 0;
 }
-#endif
 
 static int
 noop_test_comments ()

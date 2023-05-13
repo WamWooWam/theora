@@ -789,17 +789,13 @@ int main(int argc,char *argv[]){
   ogg_stream_packetin(&to,&op);
 
   if(audio){
-    /* vorbis streams start with three header packets */
-    ogg_packet id;
-    ogg_packet comment;
-    ogg_packet code;
+    ogg_packet header;
+    ogg_packet header_comm;
+    ogg_packet header_code;
 
-    if(vorbis_analysis_headerout(&vd,&vc,&id,&comment,&code)<0){
-      fprint(stderr,"Internal Vorbis library error.\n");
-      exit(1);
-    }
-    /* id header is automatically placed in its own page */
-    ogg_stream_packetin(&vo,&id);
+    vorbis_analysis_headerout(&vd,&vc,&header,&header_comm,&header_code);
+    ogg_stream_packetin(&vo,&header); /* automatically placed in its own
+                                         page */
     if(ogg_stream_pageout(&vo,&og)!=1){
       fprintf(stderr,"Internal Ogg library error.\n");
       exit(1);
@@ -807,9 +803,9 @@ int main(int argc,char *argv[]){
     fwrite(og.header,1,og.header_len,outfile);
     fwrite(og.body,1,og.body_len,outfile);
 
-    /* append remaining vorbis header packets */
-    ogg_stream_packetin(&vo,&comment);
-    ogg_stream_packetin(&vo,&code);
+    /* remaining vorbis header packets */
+    ogg_stream_packetin(&vo,&header_comm);
+    ogg_stream_packetin(&vo,&header_code);
   }
 
   /* Flush the rest of our headers. This ensures
